@@ -71,9 +71,13 @@ app.get("/", (req, res) => {
 
 app.get("/sn", (req, res) => {
   if (client.vehicles.length === 0) {
+    let tries = 0
     const id = setInterval(() => {
       if (client.vehicles.length > 0) {
         res.json(client.vehicles);
+        clearInterval(id);
+      }else if (tries++ > 4) {
+        res.json([]);
         clearInterval(id);
       }
     }, 1000);
